@@ -11,12 +11,19 @@ class HomeState extends State<Home>{
   TextEditingController _agecontroller = new TextEditingController();
   TextEditingController _heightcontroller = new TextEditingController();
   TextEditingController _weightcontroller = new TextEditingController();
-  double age=0, height=0, weight=0, result=0;
+  double result=0;
+  String resultText = "";
   void calculBMI(){
     setState(() {
       if(_agecontroller.text.isNotEmpty && _heightcontroller.text.isNotEmpty && _weightcontroller.text.isNotEmpty){
-        result = (double.parse(_heightcontroller.text) / (double.parse(_agecontroller.text) * double.parse(_weightcontroller.text))) * 703;
+        result =  double.parse(_weightcontroller.text) /  (double.parse(_heightcontroller.text) * double.parse(_heightcontroller.text));
+        if(result <= 18.5) resultText= "underweight";
+        if(result > 18.5 || result <= 24.9) resultText= "nrmal weight";
+        if(result > 25.0 || result <= 29.9) resultText= "overweight";
+        if(result > 30   || result <= 39.9 ) resultText= "obesity";
+        if(result > 40 ) resultText= "morbid obesity";
       }
+      
     });
   }
   @override
@@ -53,7 +60,7 @@ class HomeState extends State<Home>{
                 autofocus: true,
                 keyboardType: TextInputType.numberWithOptions(),
                 decoration: new InputDecoration(
-                  hintText: 'Height in cm',
+                  hintText: 'Height in m',
                   icon: new Icon(Icons.gesture),
                 ),
               ),
@@ -65,7 +72,7 @@ class HomeState extends State<Home>{
                 autofocus: true,
                 keyboardType: TextInputType.numberWithOptions(),
                 decoration: new InputDecoration(
-                  hintText: 'Weight in kg',
+                  hintText: 'Weight in Kg',
                   icon: new Icon(Icons.panorama_wide_angle),
                 ),
               ),
@@ -85,7 +92,14 @@ class HomeState extends State<Home>{
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new Padding(padding: EdgeInsets.only(top: 50)),
-                new Text('Result here: $result', style: new TextStyle(fontSize: 24, fontWeight: FontWeight.w500),)
+                new Text('BMI: $result', style: new TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)
+              ],
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Padding(padding: EdgeInsets.only(top: 50)),
+                new Text('$resultText', style: new TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.deepOrange),)
               ],
             ),
           ],
